@@ -96,6 +96,13 @@ fun GameScreen(gameViewModel: GameViewModel = viewModel()) {
         }
 
         GameStatus(score = 0, modifier = Modifier.padding(20.dp))
+
+        if (gameUiState.isGameOver) {
+            FinalScoreDialog(
+                score = gameUiState.score,
+                onPlayAgain = { gameViewModel.resetGame() }
+            )
+        }
     }
 }
 @Composable
@@ -167,7 +174,7 @@ fun GameLayout(
                     imeAction = ImeAction.Done
                 ),
                 keyboardActions = KeyboardActions(
-                    onDone = { onKeyboardDone }
+                    onDone = { onKeyboardDone() }
                 )
             )
         }
@@ -181,7 +188,7 @@ fun GameLayout(
 private fun FinalScoreDialog(
     score: Int,
     onPlayAgain: () -> Unit,
-    modfifier: Modifier = Modifier
+    modifier: Modifier = Modifier
 ) {
     val activity = (LocalContext.current as Activity)
 
@@ -193,7 +200,7 @@ private fun FinalScoreDialog(
         },
         title = { Text(text = stringResource(R.string.congratulations)) },
         text = { Text(text = stringResource(R.string.you_scored, score)) },
-        modifier = modfifier,
+        modifier = modifier,
         dismissButton = {
             TextButton(onClick = {
                 activity.finish()
