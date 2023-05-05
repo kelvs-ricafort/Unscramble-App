@@ -8,6 +8,7 @@ import com.newtechieblog.wordpress.unscrambleapp.data.allWords
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 
 class GameViewModel: ViewModel() {
     // Game UI
@@ -39,6 +40,22 @@ class GameViewModel: ViewModel() {
      */
     fun updateUserGuess(guessedWord: String) {
         userGuess = guessedWord
+    }
+
+    /**
+     * Checks if the user's guess is correct.
+     * Increases the score accordingly.
+     */
+    fun checkUserGuess() {
+        if (userGuess.equals(currentWord, ignoreCase = true)) {
+            // User's guess is correct, increase the score
+            // and call updateGameState() to prepare the game for next round
+        } else {
+            // User's guess is wrong, show an error
+            _uiState.update { currentState ->
+                currentState.copy(isGuessedWordWrong = true)
+            }
+        }
     }
 
     private fun shuffleCurrentWord(word: String): String {
